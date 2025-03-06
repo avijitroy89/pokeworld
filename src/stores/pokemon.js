@@ -5,6 +5,7 @@ export const usePokemonStore = defineStore('polemon', () => {
   let allPokemonData = ref([])
   let nextApiUrl = ref('')
   let prevApiUrl = ref('')
+  let searchedData = ref('')
 
   async function getAllPokemonData(itemLimit = 10) {
     try {
@@ -51,6 +52,15 @@ export const usePokemonStore = defineStore('polemon', () => {
       }
     }
   }
+
+  const updateSearchedData = (newData) => {
+    if (newData.length) {
+      searchedData.value = newData
+    } else {
+      searchedData.value = ''
+    }
+  }
+
   return {
     getAllPokemonData,
     allPokemonData,
@@ -58,5 +68,7 @@ export const usePokemonStore = defineStore('polemon', () => {
     nextApiUrl,
     prevApiUrl,
     getNewCards,
+    updateSearchedData,
+    searchedData,
   }
 })

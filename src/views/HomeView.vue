@@ -2,11 +2,12 @@
 
 import ItemCard from '@/components/ItemCard.vue'
 import { usePokemonStore } from '@/stores/pokemon'
-import { onMounted, computed } from 'vue';
+import { onMounted, computed, ref, watch } from 'vue';
 
 
 const pokemonStore = usePokemonStore();
 let allPokemonData = computed(() => pokemonStore.allPokemonData);
+let searchedData = ref('')
 
 onMounted(async () => {
   await pokemonStore.getAllPokemonData()
@@ -14,12 +15,26 @@ onMounted(async () => {
 })
 const getCardsOnDropdownChange = async (event) => {
   if (event.target.value) {
+    searchedData.value = ''
+    pokemonStore.updateSearchedData('');
     await pokemonStore.getAllPokemonData(event.target.value)
   }
 }
-const getCards = (type) => {
-  pokemonStore.getNewCards(type)
+const getCards = async (type) => {
+  pokemonStore.updateSearchedData('');
+  searchedData.value = ''
+  await pokemonStore.getNewCards(type);
+
 }
+
+watch(searchedData, (newVal) => {
+  if (newVal.length) {
+    pokemonStore.updateSearchedData(newVal);
+  } else {
+    pokemonStore.updateSearchedData('');
+
+  }
+})
 </script>
 
 
@@ -45,6 +60,9 @@ const getCards = (type) => {
             </li>
           </ul>
         </nav>
+      </div>
+      <div class="col">
+        <input v-model="searchedData" class="form-control" type="search" placeholder="Search" aria-label="Search">
       </div>
     </div>
   </div>
