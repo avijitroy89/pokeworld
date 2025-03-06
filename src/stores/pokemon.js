@@ -7,21 +7,31 @@ export const usePokemonStore = defineStore('polemon', () => {
   let prevApiUrl = ref('')
 
   async function getAllPokemonData(offsetItems, limitItems) {
-    const response = await fetch(
-      `https://pokeapi.co/api/v2/pokemon?offset=${offsetItems}&limit=${limitItems}`,
-    )
-    console.log(response)
-    if (response.status === 200) {
-      const data = await response.json()
-      nextApiUrl.value = data.next
-      prevApiUrl.value = data.previous
-      allPokemonData.value = data.results
+    try {
+      const response = await fetch(
+        `https://pokeapi.co/api/v2/pokemon?offset=${offsetItems}&limit=${limitItems}`,
+      )
+      console.log(response)
+      if (response.status === 200) {
+        const data = await response.json()
+        nextApiUrl.value = data.next
+        prevApiUrl.value = data.previous
+        allPokemonData.value = data.results
+      }
+    } catch (err) {
+      console.log(err)
     }
   }
   async function getSinglePokemonData(name) {
-    const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}/`)
+    try {
+      const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}/`)
 
-    return await response.json()
+      if (response.status === 200) {
+        return await response.json()
+      }
+    } catch (err) {
+      alert(err)
+    }
   }
 
   async function getNewCards(type) {
