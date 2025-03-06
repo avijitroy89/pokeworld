@@ -11,6 +11,10 @@ export const usePokemonStore = defineStore('polemon', () => {
 
     allPokemonData.value = (await response.json()).results
   }
+  async function getSinglePokemonData(name) {
+    const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}/`)
 
-  return { getAllPokemonData, allPokemonData }
+    return await response.json()
+  }
+  return { getAllPokemonData, allPokemonData, getSinglePokemonData }
 })
