@@ -14,6 +14,9 @@ onMounted(async () => {
 
 })
 
+const getCards = (type) => {
+  pokemonStore.getNewCards(type)
+}
 </script>
 
 
@@ -26,6 +29,19 @@ onMounted(async () => {
     </div>
     <div class="row">
 
+      <div class="col offset-md-4">
+        <nav aria-label="...">
+          <ul class="pagination">
+            <li class="page-item">
+              <span class="page-link" @click="getCards('previous')">Previous</span>
+            </li>
+            <li class="page-item">
+              <span class="page-link" @click="getCards('next')">Next</span>
+            </li>
+          </ul>
+        </nav>
+      </div>
     </div>
   </div>
+
 </template>
