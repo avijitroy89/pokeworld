@@ -6,11 +6,9 @@ export const usePokemonStore = defineStore('polemon', () => {
   let nextApiUrl = ref('')
   let prevApiUrl = ref('')
 
-  async function getAllPokemonData(offsetItems, limitItems) {
+  async function getAllPokemonData(itemLimit = 10) {
     try {
-      const response = await fetch(
-        `https://pokeapi.co/api/v2/pokemon?offset=${offsetItems}&limit=${limitItems}`,
-      )
+      const response = await fetch(`https://pokeapi.co/api/v2/pokemon?offset=0&limit=${itemLimit}`)
       console.log(response)
       if (response.status === 200) {
         const data = await response.json()
