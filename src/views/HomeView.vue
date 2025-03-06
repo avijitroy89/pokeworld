@@ -1,5 +1,6 @@
 <script setup>
 
+import ItemCard from '@/components/ItemCard.vue'
 import { usePokemonStore } from '@/stores/pokemon'
 import { onMounted, ref } from 'vue';
 
@@ -14,6 +15,28 @@ onMounted(async () => {
 
 </script>
 
+
 <template>
-  <div></div>
+  <div class="container">
+    <div class="row gy-4">
+      <div class="col-3">
+        <ItemCard />
+      </div>
+      <div class="col-3">
+        <ItemCard />
+      </div>
+      <div class="col-3">
+        <ItemCard />
+      </div>
+      <div class="col-3">
+        <ItemCard />
+      </div>
+      <div class="col-3">
+        <ItemCard />
+      </div>
+    </div>
+    <div class="row">
+
+    </div>
+  </div>
 </template>
