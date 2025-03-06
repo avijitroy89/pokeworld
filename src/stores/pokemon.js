@@ -54,11 +54,7 @@ export const usePokemonStore = defineStore('polemon', () => {
   }
 
   const updateSearchedData = (newData) => {
-    if (newData.length) {
-      searchedData.value = newData
-    } else {
-      searchedData.value = ''
-    }
+    searchedData.value = newData
   }
 
   return {

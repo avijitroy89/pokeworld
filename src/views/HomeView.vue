@@ -28,12 +28,8 @@ const getCards = async (type) => {
 }
 
 watch(searchedData, (newVal) => {
-  if (newVal.length) {
-    pokemonStore.updateSearchedData(newVal);
-  } else {
-    pokemonStore.updateSearchedData('');
 
-  }
+  pokemonStore.updateSearchedData(newVal);
 })
 </script>
 

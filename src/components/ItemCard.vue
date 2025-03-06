@@ -1,6 +1,6 @@
 <script setup>
 import { usePokemonStore } from '@/stores/pokemon'
-import { onMounted, computed, ref, watch, onUpdated } from 'vue';
+import { onMounted, computed, ref, watch } from 'vue';
 
 const pokemonStore = usePokemonStore();
 
@@ -26,12 +26,22 @@ onMounted(async () => {
     itemDetails.value = data;
 })
 const searchByname = () => {
-    console.log(searchedData.value)
+    // console.log(abilities.value[0].ability.name)
     if (searchedData.value.length > 0 && searchedData.value != '') {
 
         if (itemDetails.value.name.includes(searchedData.value)) {
             matchFound.value = true
-        } else {
+        } else if (abilities.value) {
+            abilities.value.forEach(element => {
+                // console.log(element.ability.name, searchedData.value)
+                if (element.ability.name.includes(searchedData.value)) {
+                    matchFound.value = true
+                } else {
+                    matchFound.value = false
+                }
+            });
+        }
+        else {
             matchFound.value = false
         }
     } else {
@@ -46,13 +56,15 @@ watch(props, async (newVal) => {
     }
 });
 watch(searchedData, (newVal) => {
+    
+  console.log('search-watch', newVal == '')
     if (newVal) {
         searchByname()
+    }else{
+        matchFound.value = true
     }
 });
-onUpdated(() => {
-    searchByname()
-})
+
 </script>
 
 <template>
