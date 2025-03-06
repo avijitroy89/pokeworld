@@ -2,6 +2,11 @@
 import { onMounted } from 'vue';
 
 
+const props = defineProps({
+    item: {
+        type: Object
+    }
+})
 onMounted(async () => {
 })
 
@@ -12,7 +17,7 @@ onMounted(async () => {
         <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/1.png"
             class="card-img-top" alt="...">
         <div class="card-body">
-            <h5 class="card-title">name</h5>
+            <h5 class="card-title">{{ props.item.name }}</h5>
             <p class="card-text">height: <span>23</span></p>
             <p class="card-text">weight: <span>30</span></p>
         </div>
