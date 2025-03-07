@@ -1,8 +1,6 @@
 <script setup>
-// import { usePokemonStore } from '@/stores/pokemon'
 import { onMounted } from 'vue';
 
-// const pokemonStore = usePokemonStore();
 
 const props = defineProps({
     item: {
@@ -10,66 +8,15 @@ const props = defineProps({
     }
 });
 
-// const itemDetails = ref([]);
-// const abilities = computed(() => {
-//     return itemDetails?.value.abilities;
-// })
-// const pokeImage = computed(() => {
-//     return itemDetails.value?.sprites?.other["official-artwork"];
-// })
-// const searchedData = computed(() => {
-//     return pokemonStore.searchedData;
-// })
-// let matchFound = ref(true)
 onMounted(async () => {
     // const data = await pokemonStore.getSinglePokemonData(props.item.name);
     // itemDetails.value = data;
 })
-// const searchByname = () => {
-//     // console.log(abilities.value[0].ability.name)
-//     if (searchedData.value.length > 0 && searchedData.value != '') {
-
-//         if (itemDetails.value.name.includes(searchedData.value)) {
-//             matchFound.value = true
-//         } else if (abilities.value) {
-//             abilities.value.forEach(element => {
-//                 // console.log(element.ability.name, searchedData.value)
-//                 if (element.ability.name.includes(searchedData.value)) {
-//                     matchFound.value = true
-//                 } else {
-//                     matchFound.value = false
-//                 }
-//             });
-//         }
-//         else {
-//             matchFound.value = false
-//         }
-//     } else {
-//         matchFound.value = true
-//     }
-// }
-// watch(props, async (newVal) => {
-//     if (newVal) {
-//         const data = await pokemonStore.getSinglePokemonData(props.item.name);
-//         itemDetails.value = data;
-
-//     }
-// });
-// watch(searchedData, (newVal) => {
-    
-//   console.log('search-watch', newVal == '')
-//     if (newVal) {
-//         // searchByname()
-//     }else{
-//         matchFound.value = true
-//     }
-// });
-
 </script>
 
 <template>
     <div class="card">
-        <img v-if="item" :src="props.item.sprites.front_shiny" class="card-img-top" alt="">
+        <img v-if="props.item" :src="props.item.sprites.front_shiny" class="card-img-top" alt="">
         <div class="card-body">
             <h5 class="card-title">{{ props.item.name }}</h5>
             <p class="card-text" v-if="props.item">height: <span>{{ props.item.height }}</span></p>
@@ -79,7 +26,8 @@ onMounted(async () => {
             List of Abilities
         </div>
         <ul class="list-group list-group-flush" v-if="props.item">
-            <li class="list-group-item" v-for="(item, index) in props.item.abilities" :key="index">{{ item.ability.name }}</li>
+            <li class="list-group-item" v-for="(data, index) in props.item.abilities" :key="index">{{ data.ability.name
+                }}</li>
         </ul>
     </div>
 
