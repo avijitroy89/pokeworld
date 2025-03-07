@@ -7,29 +7,50 @@ import { onMounted, computed, ref, watch } from 'vue';
 
 const pokemonStore = usePokemonStore();
 let allPokemonData = computed(() => pokemonStore.allPokemonData);
-let searchedData = ref('')
+let searchedData = ref('');
+let allPokemonLocalData = ref([]);
 
 onMounted(async () => {
   await pokemonStore.getAllPokemonData()
-
+  allPokemonLocalData.value = pokemonStore.allPokemonData
 })
 const getCardsOnDropdownChange = async (event) => {
   if (event.target.value) {
     searchedData.value = ''
-    pokemonStore.updateSearchedData('');
     await pokemonStore.getAllPokemonData(event.target.value)
   }
 }
 const getCards = async (type) => {
-  pokemonStore.updateSearchedData('');
   searchedData.value = ''
   await pokemonStore.getNewCards(type);
+}
+
+
+const searchByname = (event) => {
+  searchedData.value = event.target.value;
+  let data;
+  if (searchedData.value.length > 0 && searchedData.value != '') {
+    data = allPokemonData.value.filter((item) => {
+      if (item.name.includes(searchedData.value)) {
+        return item
+      }
+    })
+    allPokemonLocalData.value = data
+  } else {
+    allPokemonLocalData.value = allPokemonData.value
+  }
 
 }
 
-watch(searchedData, (newVal) => {
+// const sortByDropdownChange = (event)=>{
 
-  pokemonStore.updateSearchedData(newVal);
+// }
+
+watch(allPokemonData, (newVal) => {
+  if (newVal) {
+    allPokemonLocalData.value = pokemonStore.allPokemonData
+  }
+
 })
 </script>
 
@@ -37,7 +58,7 @@ watch(searchedData, (newVal) => {
 <template>
   <div class="container">
     <div class="row">
-      <div class="col">
+      <div class="col">as{{ allPokemonLocalData.value }}
         <span>cards per page: </span>
         <select name="" id="" @change="getCardsOnDropdownChange($event)">
           <option selected="selected" value="10">10</option>
@@ -45,11 +66,20 @@ watch(searchedData, (newVal) => {
           <option value="50">50</option>
         </select>
       </div>
-      <div class="col offset-md-4">
+      <div class="col">
+        <span>sort by</span>
+        <select name="" id="" @change="sortByDropdownChange($event)">
+          <option selected="selected" value="name">Name</option>
+          <option value="Height">Height</option>
+          <option value="weight">Weight</option>
+        </select>
+      </div>
+      <div class="col">
         <nav aria-label="...">
           <ul class="pagination">
             <li class="page-item">
-              <span class="page-link" @click="getCards('previous')">Previous</span>
+              <span class="page-link" :class="{ 'disabled': !pokemonStore.prevApiUrl }"
+                @click="getCards('previous')">Previous</span>
             </li>
             <li class="page-item">
               <span class="page-link" @click="getCards('next')">Next</span>
@@ -58,13 +88,14 @@ watch(searchedData, (newVal) => {
         </nav>
       </div>
       <div class="col">
-        <input v-model="searchedData" class="form-control" type="search" placeholder="Search" aria-label="Search">
+        <input class="form-control" v-model="searchedData" type="search" placeholder="Search" aria-label="Search"
+          @input="searchByname($event)">
       </div>
     </div>
   </div>
   <div class="container">
     <div class="row gy-4">
-      <div class="col-3" v-for="(item, index) in allPokemonData" :key="index">
+      <div class="col-3" v-for="(item, index) in allPokemonLocalData" :key="index">
         <ItemCard :item="item" />
       </div>
     </div>
