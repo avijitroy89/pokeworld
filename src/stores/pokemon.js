@@ -1,21 +1,49 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
-export const usePokemonStore = defineStore('polemon', () => {
+export const usePokemonStore = defineStore('pokemon', () => {
   let allPokemonData = ref([])
   let nextApiUrl = ref('')
   let prevApiUrl = ref('')
   let searchedData = ref('')
 
-  async function getAllPokemonData(itemLimit = 10) {
+  // const newPokiData = computed(() => {
+  //   const data = []
+  //   allPokemonData.value.forEach(async (element) => {
+  //     const res = await getSinglePokemonData(element.name)
+  //     const pokeUpdatedData = {
+  //       name: res.name,
+  //       height: res.height,
+  //       weight: res.weight,
+  //       abilities: res.abilities,
+  //       sprites: res.sprites.other['official-artwork'],
+  //     }
+  //     data.push(pokeUpdatedData)
+  //   })
+  //   return data
+  // })
+  async function getAllPokemonData(itemLimit = 2) {
     try {
       const response = await fetch(`https://pokeapi.co/api/v2/pokemon?offset=0&limit=${itemLimit}`)
-      console.log(response)
       if (response.status === 200) {
         const data = await response.json()
         nextApiUrl.value = data.next
         prevApiUrl.value = data.previous
-        allPokemonData.value = data.results
+        // allPokemonData.value = data.results
+
+        // const dataItems = []
+        data.results.forEach(async (element) => {
+          const res = await getSinglePokemonData(element.name)
+          const pokeUpdatedData = {
+            name: res.name,
+            height: res.height,
+            weight: res.weight,
+            abilities: res.abilities,
+            sprites: res.sprites.other['official-artwork'],
+          }
+          allPokemonData.value.push(pokeUpdatedData)
+        })
+        // return dataItems
       }
     } catch (err) {
       console.log(err)
@@ -34,13 +62,26 @@ export const usePokemonStore = defineStore('polemon', () => {
   }
 
   async function getNewCards(type) {
+    allPokemonData.value = []
     if (type === 'next') {
       const response = await fetch(nextApiUrl.value)
-      if (response.status === 200) {
+
+      if (response.status === 200 && !allPokemonData.value.length) {
         const data = await response.json()
         nextApiUrl.value = data.next
         prevApiUrl.value = data.previous
-        allPokemonData.value = data.results
+
+        data.results.forEach(async (element) => {
+          const res = await getSinglePokemonData(element.name)
+          const pokeUpdatedData = {
+            name: res.name,
+            height: res.height,
+            weight: res.weight,
+            abilities: res.abilities,
+            sprites: res.sprites.other['official-artwork'],
+          }
+          allPokemonData.value.push(pokeUpdatedData)
+        })
       }
     } else {
       const response = await fetch(prevApiUrl.value)
@@ -48,7 +89,18 @@ export const usePokemonStore = defineStore('polemon', () => {
         const data = await response.json()
         nextApiUrl.value = data.next
         prevApiUrl.value = data.previous
-        allPokemonData.value = data.results
+
+        data.results.forEach(async (element) => {
+          const res = await getSinglePokemonData(element.name)
+          const pokeUpdatedData = {
+            name: res.name,
+            height: res.height,
+            weight: res.weight,
+            abilities: res.abilities,
+            sprites: res.sprites.other['official-artwork'],
+          }
+          allPokemonData.value.push(pokeUpdatedData)
+        })
       }
     }
   }

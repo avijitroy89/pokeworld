@@ -2,7 +2,7 @@
 
 import ItemCard from '@/components/ItemCard.vue'
 import { usePokemonStore } from '@/stores/pokemon'
-import { onMounted, computed, ref, watch } from 'vue';
+import { onMounted, computed, ref } from 'vue';
 
 
 const pokemonStore = usePokemonStore();
@@ -12,25 +12,31 @@ let searchedData = ref('')
 onMounted(async () => {
   await pokemonStore.getAllPokemonData()
 
+  // console.log('new-data',pokemonStore.newPokiData)
+
 })
 const getCardsOnDropdownChange = async (event) => {
   if (event.target.value) {
-    searchedData.value = ''
-    pokemonStore.updateSearchedData('');
+    // searchedData.value = ''
+    // pokemonStore.updateSearchedData('');
     await pokemonStore.getAllPokemonData(event.target.value)
   }
 }
 const getCards = async (type) => {
-  pokemonStore.updateSearchedData('');
-  searchedData.value = ''
+  // pokemonStore.updateSearchedData('');
+  // searchedData.value = ''
   await pokemonStore.getNewCards(type);
+
 
 }
 
-watch(searchedData, (newVal) => {
+// const sortByDropdownChange = (event)=>{
 
-  pokemonStore.updateSearchedData(newVal);
-})
+// }
+// watch(searchedData, (newVal) => {
+
+//   pokemonStore.updateSearchedData(newVal);
+// })
 </script>
 
 
@@ -45,11 +51,20 @@ watch(searchedData, (newVal) => {
           <option value="50">50</option>
         </select>
       </div>
+      <div class="col">
+        <span>sort by</span>
+        <select name="" id="" @change="sortByDropdownChange($event)">
+          <option selected="selected" value="name">Name</option>
+          <option value="Height">Height</option>
+          <option value="weight">Weight</option>
+        </select>
+      </div>
       <div class="col offset-md-4">
         <nav aria-label="...">
           <ul class="pagination">
             <li class="page-item">
-              <span class="page-link" @click="getCards('previous')">Previous</span>
+              <span class="page-link" :class="{ 'disabled': !pokemonStore.prevApiUrl }"
+                @click="getCards('previous')">Previous</span>
             </li>
             <li class="page-item">
               <span class="page-link" @click="getCards('next')">Next</span>
