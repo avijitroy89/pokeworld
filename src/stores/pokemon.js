@@ -6,7 +6,7 @@ export const usePokemonStore = defineStore('pokemon', () => {
   let nextApiUrl = ref('')
   let prevApiUrl = ref('')
 
-  async function getAllPokemonData(itemLimit = 2) {
+  async function getAllPokemonData(itemLimit = 20) {
     allPokemonData.value = []
     try {
       const response = await fetch(`https://pokeapi.co/api/v2/pokemon?offset=0&limit=${itemLimit}`)

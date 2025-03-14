@@ -9,6 +9,7 @@ const pokemonStore = usePokemonStore();
 let allPokemonData = computed(() => pokemonStore.allPokemonData);
 let searchedData = ref('');
 let allPokemonLocalData = ref([]);
+let sortData = ref('')
 
 onMounted(async () => {
   await pokemonStore.getAllPokemonData()
@@ -42,12 +43,18 @@ const searchByname = (event) => {
 
 }
 
-// const sortByDropdownChange = (event)=>{
-
-// }
+const sortByDropdownChange = (event) => {
+  if (event.target.value) {
+    sortData.value = event.target.value;
+    allPokemonLocalData.value.sort((a, b) => {
+      return b.name - a.name
+    })
+  }
+}
 
 watch(allPokemonData, (newVal) => {
   if (newVal) {
+    console.log('in')
     allPokemonLocalData.value = pokemonStore.allPokemonData
   }
 
@@ -61,15 +68,16 @@ watch(allPokemonData, (newVal) => {
       <div class="col">as{{ allPokemonLocalData.value }}
         <span>cards per page: </span>
         <select name="" id="" @change="getCardsOnDropdownChange($event)">
-          <option selected="selected" value="10">10</option>
-          <option value="20">20</option>
+          <option value="10">10</option>
+          <option selected="selected" value="20">20</option>
           <option value="50">50</option>
         </select>
       </div>
       <div class="col">
         <span>sort by</span>
-        <select name="" id="" @change="sortByDropdownChange($event)">
-          <option selected="selected" value="name">Name</option>
+        <select name="sort" id="" @change="sortByDropdownChange($event)">
+          <option selected="selected" value="name">Select</option>
+          <option value="name">Name</option>
           <option value="Height">Height</option>
           <option value="weight">Weight</option>
         </select>
