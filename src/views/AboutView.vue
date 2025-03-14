@@ -4,18 +4,6 @@
   </div>
 </template>
 <script setup>
-
-import { usePokemonStore } from '@/stores/pokemon'
-import { onMounted } from 'vue';
-
-
-const pokemonStore = usePokemonStore();
-
-onMounted(async () => {
-  await pokemonStore.getAllPokemonData()
-
-})
-
 </script>
 
 <style></style>
