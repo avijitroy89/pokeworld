@@ -10,6 +10,7 @@ export const usePokemonStore = defineStore('pokemon', () => {
     allPokemonData.value = []
     try {
       const response = await fetch(`https://pokeapi.co/api/v2/pokemon?offset=0&limit=${itemLimit}`)
+
       if (response.status === 200) {
         const data = await response.json()
         nextApiUrl.value = data.next
@@ -89,9 +90,6 @@ export const usePokemonStore = defineStore('pokemon', () => {
   return {
     getAllPokemonData,
     allPokemonData,
-    getSinglePokemonData,
-    nextApiUrl,
-    prevApiUrl,
     getNewCards,
   }
 })

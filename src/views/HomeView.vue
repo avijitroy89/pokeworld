@@ -103,6 +103,10 @@ watch(allPokemonData, (newVal) => {
   </div>
   <div class="container">
     <div class="row gy-4">
+      <div class="d-flex justify-content-center" v-if="!allPokemonLocalData.length">
+        <div class="spinner-border" role="status">
+        </div>
+      </div>
       <div class="col-3" v-for="(item, index) in allPokemonLocalData" :key="index">
         <ItemCard :item="item" />
       </div>
