@@ -9,8 +9,6 @@ const props = defineProps({
 });
 
 onMounted(async () => {
-    // const data = await pokemonStore.getSinglePokemonData(props.item.name);
-    // itemDetails.value = data;
 })
 </script>
 
@@ -27,7 +25,7 @@ onMounted(async () => {
         </div>
         <ul class="list-group list-group-flush" v-if="props.item">
             <li class="list-group-item" v-for="(data, index) in props.item.abilities" :key="index">{{ data.ability.name
-                }}</li>
+            }}</li>
         </ul>
     </div>
 
