@@ -1,20 +1,6 @@
-<script setup>
-import { onMounted } from 'vue';
-
-
-const props = defineProps({
-    item: {
-        type: Object
-    }
-});
-
-onMounted(async () => {
-})
-</script>
-
 <template>
     <div class="card">
-        <img v-if="props.item" :src="props.item.sprites.front_shiny" class="card-img-top" alt="">
+        <img v-if="props.item" :src="props.item.sprites.front_shiny" class="card-img-top card-image" alt="">
         <div class="card-body">
             <h5 class="card-title">{{ props.item.name }}</h5>
             <p class="card-text" v-if="props.item">height: <span>{{ props.item.height }}</span></p>
@@ -31,4 +17,25 @@ onMounted(async () => {
 
 </template>
 
-<style></style>
+<script setup>
+import { onMounted } from 'vue';
+
+
+const props = defineProps({
+    item: {
+        type: Object
+    }
+});
+
+onMounted(async () => {
+})
+</script>
+
+<style lang="scss" scoped>
+.card {
+    &-image {
+        max-width: 150px;
+        margin: 0 auto;
+    }
+}
+</style>

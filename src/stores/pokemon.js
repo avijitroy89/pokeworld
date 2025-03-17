@@ -91,5 +91,6 @@ export const usePokemonStore = defineStore('pokemon', () => {
     getAllPokemonData,
     allPokemonData,
     getNewCards,
+    prevApiUrl,
   }
 })

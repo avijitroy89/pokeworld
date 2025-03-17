@@ -7,6 +7,7 @@ import { onMounted, computed, ref, watch } from 'vue';
 
 const pokemonStore = usePokemonStore();
 let allPokemonData = computed(() => pokemonStore.allPokemonData);
+let prevApiUrl = computed(() => pokemonStore.prevApiUrl)
 let searchedData = ref('');
 let allPokemonLocalData = ref([]);
 let sortData = ref('')
@@ -65,7 +66,7 @@ watch(allPokemonData, (newVal) => {
 <template>
   <div class="container">
     <div class="row">
-      <div class="col">as{{ allPokemonLocalData.value }}
+      <div class="col">
         <span>cards per page: </span>
         <select name="" id="" @change="getCardsOnDropdownChange($event)">
           <option value="10">10</option>
@@ -86,11 +87,11 @@ watch(allPokemonData, (newVal) => {
         <nav aria-label="...">
           <ul class="pagination">
             <li class="page-item">
-              <span class="page-link" :class="{ 'disabled': !pokemonStore.prevApiUrl }"
-                @click="getCards('previous')">Previous</span>
+              <a class="page-link" :class="{ 'disabled': prevApiUrl === null }" @click="getCards('previous')"
+                href="#">Previous</a>
             </li>
             <li class="page-item">
-              <span class="page-link" @click="getCards('next')">Next</span>
+              <a class="page-link" @click="getCards('next')" href="#">Next</a>
             </li>
           </ul>
         </nav>
