@@ -5,30 +5,36 @@ export const usePokemonStore = defineStore('pokemon', () => {
   let allPokemonData = ref([])
   let nextApiUrl = ref('')
   let prevApiUrl = ref('')
+  let showErrorMgs = ref(false)
 
   async function getAllPokemonData(itemLimit = 20) {
     allPokemonData.value = []
     try {
       const response = await fetch(`https://pokeapi.co/api/v2/pokemon?offset=0&limit=${itemLimit}`)
 
-      if (response.status === 200) {
-        const data = await response.json()
-        nextApiUrl.value = data.next
-        prevApiUrl.value = data.previous
-        data.results.forEach(async (element) => {
-          const res = await getSinglePokemonData(element.name)
-          const pokeUpdatedData = {
-            name: res.name,
-            height: res.height,
-            weight: res.weight,
-            abilities: res.abilities,
-            sprites: res.sprites.other['official-artwork'],
-          }
-          allPokemonData.value.push(pokeUpdatedData)
-        })
+      if (response.status !== 200) {
+        console.log('in status')
+        throw new Error()
       }
+      const data = await response.json()
+      nextApiUrl.value = data.next
+      prevApiUrl.value = data.previous
+      data.results.forEach(async (element) => {
+        const res = await getSinglePokemonData(element.name)
+        const pokeUpdatedData = {
+          name: res.name,
+          height: res.height,
+          weight: res.weight,
+          abilities: res.abilities,
+          sprites: res.sprites.other['official-artwork'],
+        }
+        allPokemonData.value.push(pokeUpdatedData)
+      })
     } catch (err) {
-      console.log(err)
+      console.log('in catch-', err)
+      showErrorMgs.value = true
+    } finally {
+      console.log('inside finally')
     }
   }
   async function getSinglePokemonData(name) {
@@ -91,5 +97,7 @@ export const usePokemonStore = defineStore('pokemon', () => {
     getAllPokemonData,
     allPokemonData,
     getNewCards,
+    prevApiUrl,
+    showErrorMgs,
   }
 })

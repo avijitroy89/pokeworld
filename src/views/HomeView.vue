@@ -1,3 +1,76 @@
+<template>
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <span>cards per page: </span>
+        <select name="" id="" @change="getCardsOnDropdownChange($event)">
+          <option value="10">10</option>
+          <option selected="selected" value="20">20</option>
+          <option value="50">50</option>
+        </select>
+      </div>
+      <div class="col">
+        <span>sort by</span>
+        <select name="sort" id="" @change="sortByDropdownChange($event)">
+          <option selected="selected" value="name">Select</option>
+          <option value="name">Name</option>
+          <option value="Height">Height</option>
+          <option value="weight">Weight</option>
+        </select>
+      </div>
+      <div class="col">
+        <nav aria-label="...">
+          <ul class="pagination">
+            <li class="page-item">
+              <a class="page-link" :class="{ 'disabled': prevApiUrl === null }" @click="getCards('previous')"
+                href="#">Previous</a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" @click="getCards('next')" href="#">Next</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+      <div class="col">
+        <input class="form-control" v-model="searchedData" type="search" placeholder="Search" aria-label="Search"
+          @input="searchByname($event)">
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row gy-4">
+      <div class="d-flex justify-content-center" v-if="!allPokemonLocalData.length && !showErrorMgs">
+        <div class="spinner-border" role="status">
+        </div>
+      </div>
+
+      <div class="alert alert-danger" role="alert" v-if="showErrorMgs">
+        Seems there is a technical issue. Please refresh or try after some time.
+      </div>
+      <div class="col-3" v-for="(item, index) in allPokemonLocalData" :key="index">
+        <ItemCard :item="item" />
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col offset-md-4">
+        <nav aria-label="...">
+          <ul class="pagination">
+            <li class="page-item">
+              <span class="page-link" @click="getCards('previous')">Previous</span>
+            </li>
+            <li class="page-item">
+              <span class="page-link" @click="getCards('next')">Next</span>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+
+</template>
+
 <script setup>
 
 import ItemCard from '@/components/ItemCard.vue'
@@ -7,6 +80,8 @@ import { onMounted, computed, ref, watch } from 'vue';
 
 const pokemonStore = usePokemonStore();
 let allPokemonData = computed(() => pokemonStore.allPokemonData);
+let prevApiUrl = computed(() => pokemonStore.prevApiUrl)
+let showErrorMgs = computed(() => pokemonStore.showErrorMgs)
 let searchedData = ref('');
 let allPokemonLocalData = ref([]);
 let sortData = ref('')
@@ -54,79 +129,9 @@ const sortByDropdownChange = (event) => {
 
 watch(allPokemonData, (newVal) => {
   if (newVal) {
-    console.log('in')
+    console.log('in');
     allPokemonLocalData.value = pokemonStore.allPokemonData
   }
 
 })
 </script>
-
-
-<template>
-  <div class="container">
-    <div class="row">
-      <div class="col">as{{ allPokemonLocalData.value }}
-        <span>cards per page: </span>
-        <select name="" id="" @change="getCardsOnDropdownChange($event)">
-          <option value="10">10</option>
-          <option selected="selected" value="20">20</option>
-          <option value="50">50</option>
-        </select>
-      </div>
-      <div class="col">
-        <span>sort by</span>
-        <select name="sort" id="" @change="sortByDropdownChange($event)">
-          <option selected="selected" value="name">Select</option>
-          <option value="name">Name</option>
-          <option value="Height">Height</option>
-          <option value="weight">Weight</option>
-        </select>
-      </div>
-      <div class="col">
-        <nav aria-label="...">
-          <ul class="pagination">
-            <li class="page-item">
-              <span class="page-link" :class="{ 'disabled': !pokemonStore.prevApiUrl }"
-                @click="getCards('previous')">Previous</span>
-            </li>
-            <li class="page-item">
-              <span class="page-link" @click="getCards('next')">Next</span>
-            </li>
-          </ul>
-        </nav>
-      </div>
-      <div class="col">
-        <input class="form-control" v-model="searchedData" type="search" placeholder="Search" aria-label="Search"
-          @input="searchByname($event)">
-      </div>
-    </div>
-  </div>
-  <div class="container">
-    <div class="row gy-4">
-      <div class="d-flex justify-content-center" v-if="!allPokemonLocalData.length">
-        <div class="spinner-border" role="status">
-        </div>
-      </div>
-      <div class="col-3" v-for="(item, index) in allPokemonLocalData" :key="index">
-        <ItemCard :item="item" />
-      </div>
-    </div>
-  </div>
-  <div class="container">
-    <div class="row">
-      <div class="col offset-md-4">
-        <nav aria-label="...">
-          <ul class="pagination">
-            <li class="page-item">
-              <span class="page-link" @click="getCards('previous')">Previous</span>
-            </li>
-            <li class="page-item">
-              <span class="page-link" @click="getCards('next')">Next</span>
-            </li>
-          </ul>
-        </nav>
-      </div>
-    </div>
-  </div>
-
-</template>
