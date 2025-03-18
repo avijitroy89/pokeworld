@@ -39,14 +39,14 @@
   </div>
   <div class="container">
     <div class="row gy-4">
-      <div class="d-flex justify-content-center" v-if="!allPokemonLocalData.length">
+      <div class="d-flex justify-content-center" v-if="!allPokemonLocalData.length && !showErrorMgs">
         <div class="spinner-border" role="status">
         </div>
       </div>
 
-      <!-- <div class="alert alert-danger" role="alert" v-if="!allPokemonLocalData.length">
+      <div class="alert alert-danger" role="alert" v-if="showErrorMgs">
         Seems there is a technical issue. Please refresh or try after some time.
-      </div> -->
+      </div>
       <div class="col-3" v-for="(item, index) in allPokemonLocalData" :key="index">
         <ItemCard :item="item" />
       </div>
@@ -81,6 +81,7 @@ import { onMounted, computed, ref, watch } from 'vue';
 const pokemonStore = usePokemonStore();
 let allPokemonData = computed(() => pokemonStore.allPokemonData);
 let prevApiUrl = computed(() => pokemonStore.prevApiUrl)
+let showErrorMgs = computed(() => pokemonStore.showErrorMgs)
 let searchedData = ref('');
 let allPokemonLocalData = ref([]);
 let sortData = ref('')

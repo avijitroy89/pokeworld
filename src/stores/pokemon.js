@@ -5,11 +5,12 @@ export const usePokemonStore = defineStore('pokemon', () => {
   let allPokemonData = ref([])
   let nextApiUrl = ref('')
   let prevApiUrl = ref('')
+  let showErrorMgs = ref(false)
 
   async function getAllPokemonData(itemLimit = 20) {
     allPokemonData.value = []
     try {
-      const response = await fetch(`https://pokeapi.co/api/v2f/pokemon?offset=0&limit=${itemLimit}`)
+      const response = await fetch(`https://pokeapi.co/api/v2/pokemon?offset=0&limit=${itemLimit}`)
 
       if (response.status !== 200) {
         console.log('in status')
@@ -31,6 +32,7 @@ export const usePokemonStore = defineStore('pokemon', () => {
       })
     } catch (err) {
       console.log('in catch-', err)
+      showErrorMgs.value = true
     } finally {
       console.log('inside finally')
     }
@@ -96,5 +98,6 @@ export const usePokemonStore = defineStore('pokemon', () => {
     allPokemonData,
     getNewCards,
     prevApiUrl,
+    showErrorMgs,
   }
 })
